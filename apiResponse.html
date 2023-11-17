@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Response</title>
+    <style>
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Response</h1>
+    <pre id="apiResponseContent"></pre>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        ipcRenderer.on('display-api-response', (event, responseData) => {
+            document.getElementById('apiResponseContent').textContent = JSON.stringify(responseData, null, 2);
+        });
+    </script>
+</body>
+</html>

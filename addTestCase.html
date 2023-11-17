@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Test Case</title>
+</head>
+<body>
+    <h1>Add Test Case</h1>
+    <form id="testCaseForm">
+        <label for="apiEndpoint">API Endpoint:</label><br>
+        <input type="text" id="apiEndpoint" name="apiEndpoint"><br>
+
+        <label for="requestMethod">Request Method:</label><br>
+        <select id="requestMethod" name="requestMethod">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+            <option value="PATCH">PATCH</option>
+        </select><br>
+
+        <label for="requestBody">Request Body (JSON):</label><br>
+        <textarea id="requestBody" name="requestBody"></textarea><br>
+
+        <label for="headers">Headers (JSON):</label><br>
+        <textarea id="headers" name="headers"></textarea><br>
+
+        <input type="submit" value="Add Test Case">
+    </form>
+    <button id="saveTestCase">Save Test Case</button>
+    <button id="loadTestCase">Load Test Case</button>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.getElementById('saveTestCase').addEventListener('click', () => {
+        const testCaseData = {
+            apiEndpoint: document.getElementById('apiEndpoint').value,
+            requestMethod: document.getElementById('requestMethod').value,
+            requestBody: document.getElementById('requestBody').value,
+            headers: document.getElementById('headers').value
+        };
+        ipcRenderer.send('save-test-case', testCaseData);
+    });
+
+    document.getElementById('loadTestCase').addEventListener('click', () => {
+        ipcRenderer.send('load-test-case');
+    });
+
+    ipcRenderer.on('test-case-loaded', (event, data) => {
+        document.getElementById('apiEndpoint').value = data.apiEndpoint;
+        document.getElementById('requestMethod').value = data.requestMethod;
+        document.getElementById('requestBody').value = data.requestBody;
+        document.getElementById('headers').value = data.headers;
+    });
+    </script>
+</body>
+</html>

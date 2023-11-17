@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Electron App</title>
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Welcome to My Electron App</div>
+    <button class="button" id="addTestCaseButton">Add Test Case</button>
+    <div id="testCaseList">
+        <!-- List of test cases can be dynamically added here -->
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        document.getElementById('addTestCaseButton').addEventListener('click', () => {
+            ipcRenderer.send('open-add-test-case-window');
+        });
+        document.getElementById('loadExcelFile').addEventListener('click', () => {
+          ipcRenderer.send('load-excel-file');
+      });
+
+      ipcRenderer.on('excel-data-loaded', (event, apiCollection) => {
+          console.log('API Collection:', apiCollection);
+          // Handle the API collection (display it, store it, etc.)
+      });
+    </script>
+    <button id="loadExcelFile">Load Excel File</button>
+ 
+</body>
+</html>
